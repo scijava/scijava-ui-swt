@@ -29,34 +29,33 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.widget.InputWidget;
-import imagej.widget.ToggleWidget;
-import imagej.widget.WidgetModel;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.scijava.plugin.Plugin;
+import org.scijava.plugins.uis.swt.SWTUI;
+import org.scijava.ui.AbstractUIInputWidget;
+import org.scijava.ui.UserInterface;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of boolean toggle widget.
+ * Common superclass for SWT-based input widgets.
  * 
  * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class)
-public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
-	ToggleWidget<Composite>
+public abstract class SWTInputWidget<T> extends
+	AbstractUIInputWidget<T, Composite>
 {
 
-	private Button checkbox;
+	private Composite uiComponent;
+	private Composite parent;
 
-	// -- InputWidget methods --
+	public void setParent(final Composite parent) {
+		// CTR FIXME: Temporary hack to inject parent component.
+		this.parent = parent;
+	}
 
-	@Override
-	public Boolean getValue() {
-		return checkbox.getSelection();
+	public Composite getParent() {
+		return parent;
 	}
 
 	// -- WrapperPlugin methods --
@@ -64,24 +63,26 @@ public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
 	@Override
 	public void set(final WidgetModel model) {
 		super.set(model);
-
-		checkbox = new Button(getComponent(), SWT.CHECK);
-
-		refreshWidget();
+		uiComponent = new Composite(parent, 0);
 	}
 
-	// -- Typed methods --
+	// -- UIComponent methods --
 
 	@Override
-	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isBoolean();
+	public Composite getComponent() {
+		return uiComponent;
 	}
-
-	// -- AbstractUIInputWidget methods ---
 
 	@Override
-	public void doRefresh() {
-		final Boolean value = (Boolean) get().getValue();
-		if (value != getValue()) checkbox.setSelection(value != null && value);
+	public Class<Composite> getComponentType() {
+		return Composite.class;
 	}
+
+	// -- AbstractUIInputWidget methods --
+
+	@Override
+	protected UserInterface ui() {
+		return ui(SWTUI.NAME);
+	}
+
 }

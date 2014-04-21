@@ -29,29 +29,28 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt;
-
-import imagej.menu.MenuService;
-import imagej.platform.event.AppMenusCreatedEvent;
-import imagej.ui.AbstractUserInterface;
-import imagej.ui.DialogPrompt;
-import imagej.ui.DialogPrompt.MessageType;
-import imagej.ui.DialogPrompt.OptionType;
-import imagej.ui.SystemClipboard;
-import imagej.ui.UIService;
-import imagej.ui.UserInterface;
-import imagej.ui.viewer.DisplayWindow;
+package org.scijava.plugins.uis.swt;
 
 import java.io.File;
 
-import net.imagej.plugins.uis.swt.menu.SWTMenuCreator;
 import net.miginfocom.swt.MigLayout;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.scijava.app.AppService;
 import org.scijava.event.EventService;
+import org.scijava.menu.MenuService;
+import org.scijava.platform.event.AppMenusCreatedEvent;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugins.uis.swt.menu.SWTMenuCreator;
+import org.scijava.ui.AbstractUserInterface;
+import org.scijava.ui.DialogPrompt;
+import org.scijava.ui.DialogPrompt.MessageType;
+import org.scijava.ui.DialogPrompt.OptionType;
+import org.scijava.ui.SystemClipboard;
+import org.scijava.ui.UserInterface;
+import org.scijava.ui.viewer.DisplayWindow;
 
 /**
  * An SWT-based user interface for ImageJ.
@@ -70,7 +69,7 @@ public class SWTUI extends AbstractUserInterface implements Runnable {
 	private MenuService menuService;
 
 	@Parameter
-	private UIService uiService;
+	private AppService appService;
 
 	private SWTApplicationFrame shell;
 	private SWTToolBar toolBar;
@@ -102,7 +101,7 @@ public class SWTUI extends AbstractUserInterface implements Runnable {
 
 	@Override
 	public DisplayWindow createDisplayWindow(
-		final imagej.display.Display<?> display)
+		final org.scijava.display.Display<?> display)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -121,7 +120,7 @@ public class SWTUI extends AbstractUserInterface implements Runnable {
 
 	@Override
 	public void showContextMenu(final String menuRoot,
-		final imagej.display.Display<?> display, final int x, final int y)
+		final org.scijava.display.Display<?> display, final int x, final int y)
 	{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
@@ -156,7 +155,7 @@ public class SWTUI extends AbstractUserInterface implements Runnable {
 
 		shell = new SWTApplicationFrame(swtDisplay);
 		shell.setLayout(new MigLayout("wrap 1"));
-		shell.setText(uiService.getApp().getTitle());
+		shell.setText(appService.getApp().getTitle());
 
 		toolBar = new SWTToolBar(swtDisplay, shell, getContext());
 		statusBar = new SWTStatusBar(shell, getContext());

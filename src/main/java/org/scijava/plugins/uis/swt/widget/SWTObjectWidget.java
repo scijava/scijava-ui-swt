@@ -29,40 +29,33 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.widget.FileWidget;
-import imagej.widget.InputWidget;
-import imagej.widget.WidgetModel;
-
-import java.io.File;
-
-import net.miginfocom.swt.MigLayout;
-
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.ObjectWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of file selector widget.
+ * SWT implementation of multiple choice selector widget.
  * 
  * @author Curtis Rueden
  */
 @Plugin(type = InputWidget.class)
-public class SWTFileWidget extends SWTInputWidget<File> implements
-	FileWidget<Composite>
+public class SWTObjectWidget extends SWTInputWidget<Object> implements
+	ObjectWidget<Composite>
 {
 
-	private Text path;
-	private Button browse;
+	private Combo combo;
 
 	// -- InputWidget methods --
 
 	@Override
-	public File getValue() {
-		final String text = path.getText();
-		return text.isEmpty() ? null : new File(text);
+	public Object getValue() {
+		return get().getObjectPool().get(combo.getSelectionIndex());
 	}
 
 	// -- WrapperPlugin methods --
@@ -71,13 +64,10 @@ public class SWTFileWidget extends SWTInputWidget<File> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		getComponent().setLayout(new MigLayout());
-
-		path = new Text(getComponent(), 0);
-		path.setTextLimit(20);
-
-		browse = new Button(getComponent(), 0);
-		browse.setText("Browse");
+		combo = new Combo(getComponent(), SWT.DROP_DOWN);
+		for (final Object item : model.getObjectPool()) {
+			combo.add(item.toString());
+		}
 
 		refreshWidget();
 	}
@@ -86,15 +76,15 @@ public class SWTFileWidget extends SWTInputWidget<File> implements
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isType(File.class);
+		return super.supports(model) && model.getObjectPool().size() > 0;
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		final String text = get().getText();
-		if (text.equals(path.getText())) return; // no change
-		path.setText(text);
+		final Object value = get().getValue();
+		final int index = get().getObjectPool().indexOf(value);
+		if (index >= 0) combo.select(index);
 	}
 }

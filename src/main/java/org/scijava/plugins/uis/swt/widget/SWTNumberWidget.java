@@ -29,42 +29,33 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.widget.InputWidget;
-import imagej.widget.MessageWidget;
-import imagej.widget.WidgetModel;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.scijava.Priority;
+import org.eclipse.swt.widgets.Slider;
 import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.NumberWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of message widget.
+ * SWT implementation of number chooser widget.
  * 
  * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class, priority = Priority.HIGH_PRIORITY)
-public class SWTMessageWidget extends SWTInputWidget<String> implements
-	MessageWidget<Composite>
+@Plugin(type = InputWidget.class)
+public class SWTNumberWidget extends SWTInputWidget<Number> implements
+	NumberWidget<Composite>
 {
+
+	private Slider slider;
 
 	// -- InputWidget methods --
 
 	@Override
-	public String getValue() {
-		return null;
-	}
-
-	@Override
-	public boolean isLabeled() {
-		return false;
-	}
-
-	@Override
-	public boolean isMessage() {
-		return true;
+	public Number getValue() {
+		return slider.getSelection();
 	}
 
 	// -- WrapperPlugin methods --
@@ -73,25 +64,30 @@ public class SWTMessageWidget extends SWTInputWidget<String> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		final String text = model.getText();
+		final Number min = model.getMin();
+		final Number max = model.getMax();
+		final Number stepSize = model.getStepSize();
 
-		final Label label = new Label(getComponent(), 0);
-		label.setText(text);
-		label.setLayoutData("span");
+		slider = new Slider(getComponent(), SWT.HORIZONTAL);
+		slider.setValues(min.intValue(), min.intValue(), max.intValue(), stepSize
+			.intValue(), stepSize.intValue(), 10 * stepSize.intValue());
+
+		refreshWidget();
 	}
 
 	// -- Typed methods --
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isMessage();
+		return super.supports(model) && model.isNumber();
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		// NB: No action needed.
+		final int value = ((Number) get().getValue()).intValue();
+		if (slider.getSelection() == value) return; // no change
+		slider.setSelection(value);
 	}
-
 }

@@ -29,39 +29,72 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.ui.ApplicationFrame;
-
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Composite;
+import org.scijava.plugin.Plugin;
+import org.scijava.widget.Button;
+import org.scijava.widget.ButtonWidget;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of {@link ApplicationFrame}.
+ * A SWT widget that displays a button and invokes the callback of a parameter
+ * when the button is clicked.
  * 
- * @author Curtis Rueden
+ * @author Barry DeZonia
  */
-public class SWTApplicationFrame extends Shell implements ApplicationFrame {
+@Plugin(type = InputWidget.class)
+public class SWTButtonWidget extends SWTInputWidget<Button> implements
+	ButtonWidget<Composite>
+{
 
-	public SWTApplicationFrame(final Display display) {
-		super(display, 0);
-	}
+	// private Button button;
 
-	// -- ApplicationFrame methods --
-
-	@Override
-	public int getLocationX() {
-		return getLocation().x;
-	}
+	// -- InputWidget methods --
 
 	@Override
-	public int getLocationY() {
-		return getLocation().y;
+	public Button getValue() {
+		return null;
 	}
 
 	@Override
-	public void activate() {
-		forceFocus();
+	public boolean isLabeled() {
+		return false;
 	}
 
+	// -- WrapperPlugin methods --
+
+	@Override
+	public void set(final WidgetModel model) {
+		super.set(model);
+
+		throw new UnsupportedOperationException("unimplemented feature");
+
+		/* TODO - adapt the following code:
+		button = new Button(model.getWidgetLabel());
+		button.addActionListener(new ActionListener() {
+				
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.getItem().callback(model.getModule());
+			}
+		});
+		getComponent().add(button);
+		*/
+	}
+
+	// -- Typed methods --
+
+	@Override
+	public boolean supports(final WidgetModel model) {
+		return model.isType(Button.class);
+	}
+
+	// -- AbstractUIInputWidget methods ---
+
+	@Override
+	public void doRefresh() {
+		// nothing to do
+	}
 }

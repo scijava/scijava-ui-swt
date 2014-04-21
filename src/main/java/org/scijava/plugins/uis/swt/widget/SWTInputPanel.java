@@ -29,49 +29,53 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.ui.AbstractUIInputWidget;
-import imagej.ui.UserInterface;
-import imagej.widget.WidgetModel;
-
-import net.imagej.plugins.uis.swt.SWTUI;
+import net.miginfocom.swt.MigLayout;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.scijava.widget.AbstractInputPanel;
+import org.scijava.widget.InputPanel;
+import org.scijava.widget.InputWidget;
 
 /**
- * Common superclass for SWT-based input widgets.
+ * SWT implementation of {@link InputPanel}.
  * 
  * @author Curtis Rueden
  */
-public abstract class SWTInputWidget<T> extends
-	AbstractUIInputWidget<T, Composite>
-{
+public class SWTInputPanel extends AbstractInputPanel<Composite, Composite> {
+
+	private final Composite parent;
 
 	private Composite uiComponent;
-	private Composite parent;
 
-	public void setParent(final Composite parent) {
-		// CTR FIXME: Temporary hack to inject parent component.
+	public SWTInputPanel(final Composite parent) {
 		this.parent = parent;
 	}
 
-	public Composite getParent() {
-		return parent;
-	}
-
-	// -- WrapperPlugin methods --
+	// -- InputPanel methods --
 
 	@Override
-	public void set(final WidgetModel model) {
-		super.set(model);
-		uiComponent = new Composite(parent, 0);
+	public void addWidget(final InputWidget<?, Composite> widget) {
+		super.addWidget(widget);
+		// CTR FIXME: Find a way to put the label first.
+		addLabel(widget.get().getWidgetLabel());
+	}
+
+	@Override
+	public Class<Composite> getWidgetComponentType() {
+		return Composite.class;
 	}
 
 	// -- UIComponent methods --
 
 	@Override
 	public Composite getComponent() {
+		if (uiComponent == null) {
+			uiComponent = new Composite(parent, 0);
+			uiComponent.setLayout(new MigLayout("wrap 2"));
+		}
 		return uiComponent;
 	}
 
@@ -80,11 +84,12 @@ public abstract class SWTInputWidget<T> extends
 		return Composite.class;
 	}
 
-	// -- AbstractUIInputWidget methods --
+	// -- Helper methods --
 
-	@Override
-	protected UserInterface ui() {
-		return ui(SWTUI.NAME);
+	private Label addLabel(final String text) {
+		final Label label = new Label(getComponent(), 0);
+		label.setText(text);
+		return label;
 	}
 
 }

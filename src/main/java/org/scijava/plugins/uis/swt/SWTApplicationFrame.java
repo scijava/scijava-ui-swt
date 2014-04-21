@@ -29,67 +29,38 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt;
 
-import imagej.widget.AbstractInputPanel;
-import imagej.widget.InputPanel;
-import imagej.widget.InputWidget;
-import net.miginfocom.swt.MigLayout;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.scijava.ui.ApplicationFrame;
 
 /**
- * SWT implementation of {@link InputPanel}.
+ * SWT implementation of {@link ApplicationFrame}.
  * 
  * @author Curtis Rueden
  */
-public class SWTInputPanel extends AbstractInputPanel<Composite, Composite> {
+public class SWTApplicationFrame extends Shell implements ApplicationFrame {
 
-	private final Composite parent;
-
-	private Composite uiComponent;
-
-	public SWTInputPanel(final Composite parent) {
-		this.parent = parent;
+	public SWTApplicationFrame(final Display display) {
+		super(display, 0);
 	}
 
-	// -- InputPanel methods --
+	// -- ApplicationFrame methods --
 
 	@Override
-	public void addWidget(final InputWidget<?, Composite> widget) {
-		super.addWidget(widget);
-		// CTR FIXME: Find a way to put the label first.
-		addLabel(widget.get().getWidgetLabel());
+	public int getLocationX() {
+		return getLocation().x;
 	}
 
 	@Override
-	public Class<Composite> getWidgetComponentType() {
-		return Composite.class;
-	}
-
-	// -- UIComponent methods --
-
-	@Override
-	public Composite getComponent() {
-		if (uiComponent == null) {
-			uiComponent = new Composite(parent, 0);
-			uiComponent.setLayout(new MigLayout("wrap 2"));
-		}
-		return uiComponent;
+	public int getLocationY() {
+		return getLocation().y;
 	}
 
 	@Override
-	public Class<Composite> getComponentType() {
-		return Composite.class;
-	}
-
-	// -- Helper methods --
-
-	private Label addLabel(final String text) {
-		final Label label = new Label(getComponent(), 0);
-		label.setText(text);
-		return label;
+	public void activate() {
+		forceFocus();
 	}
 
 }

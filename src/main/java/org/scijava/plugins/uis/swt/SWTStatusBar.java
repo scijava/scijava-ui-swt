@@ -29,73 +29,60 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
+package org.scijava.plugins.uis.swt;
 
-import imagej.widget.Button;
-import imagej.widget.ButtonWidget;
-import imagej.widget.InputWidget;
-import imagej.widget.WidgetModel;
+import net.miginfocom.swt.MigLayout;
 
 import org.eclipse.swt.widgets.Composite;
-import org.scijava.plugin.Plugin;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.ProgressBar;
+import org.scijava.Context;
+import org.scijava.app.event.StatusEvent;
+import org.scijava.event.EventHandler;
+import org.scijava.plugin.Parameter;
+import org.scijava.ui.StatusBar;
+import org.scijava.ui.UIService;
 
 /**
- * A SWT widget that displays a button and invokes the callback of a parameter
- * when the button is clicked.
+ * SWT implementation of {@link StatusBar}.
  * 
- * @author Barry DeZonia
+ * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class)
-public class SWTButtonWidget extends SWTInputWidget<Button> implements
-	ButtonWidget<Composite>
-{
+public class SWTStatusBar extends Composite implements StatusBar {
 
-	// private Button button;
+	private final Label label;
+	private final ProgressBar progressBar;
 
-	// -- InputWidget methods --
+	@Parameter
+	private UIService uiService;
 
-	@Override
-	public Button getValue() {
-		return null;
+	public SWTStatusBar(final Composite parent, final Context context) {
+		super(parent, 0);
+		context.inject(this);
+
+		setLayout(new MigLayout());
+		label = new Label(this, 0);
+		progressBar = new ProgressBar(this, 0);
 	}
 
 	@Override
-	public boolean isLabeled() {
-		return false;
+	public void setStatus(final String message) {
+		label.setText(message);
 	}
-
-	// -- WrapperPlugin methods --
 
 	@Override
-	public void set(final WidgetModel model) {
-		super.set(model);
-
-		throw new UnsupportedOperationException("unimplemented feature");
-
-		/* TODO - adapt the following code:
-		button = new Button(model.getWidgetLabel());
-		button.addActionListener(new ActionListener() {
-				
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.getItem().callback(model.getModule());
-			}
-		});
-		getComponent().add(button);
-		*/
+	public void setProgress(final int val, final int max) {
+		progressBar.setSelection(val);
+		progressBar.setMaximum(max);
 	}
 
-	// -- Typed methods --
-
-	@Override
-	public boolean supports(final WidgetModel model) {
-		return model.isType(Button.class);
+	@EventHandler
+	protected void onEvent(final StatusEvent event) {
+		final String message = uiService.getStatusMessage(event);
+		final int val = event.getProgressValue();
+		final int max = event.getProgressMaximum();
+		setStatus(message);
+		setProgress(val, max);
 	}
 
-	// -- AbstractUIInputWidget methods ---
-
-	@Override
-	public void doRefresh() {
-		// nothing to do
-	}
 }

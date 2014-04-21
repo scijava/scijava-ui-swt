@@ -29,15 +29,14 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
-
-import imagej.widget.InputWidget;
-import imagej.widget.TextWidget;
-import imagej.widget.WidgetModel;
+package org.scijava.plugins.uis.swt.widget;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.TextWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
  * SWT implementation of text field widget.

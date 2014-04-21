@@ -29,17 +29,7 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
-
-import imagej.module.Module;
-import imagej.module.process.PreprocessorPlugin;
-import imagej.ui.AbstractInputHarvesterPlugin;
-import imagej.ui.UIService;
-import imagej.ui.UserInterface;
-import imagej.widget.InputHarvester;
-import imagej.widget.InputPanel;
-
-import net.imagej.plugins.uis.swt.SWTUI;
+package org.scijava.plugins.uis.swt.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -49,9 +39,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.scijava.Priority;
+import org.scijava.module.Module;
+import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
+import org.scijava.plugins.uis.swt.SWTUI;
+import org.scijava.ui.AbstractInputHarvesterPlugin;
+import org.scijava.ui.UIService;
+import org.scijava.ui.UserInterface;
+import org.scijava.widget.InputHarvester;
+import org.scijava.widget.InputPanel;
 
 /**
  * SWTInputHarvester is an {@link InputHarvester} that collects input parameter

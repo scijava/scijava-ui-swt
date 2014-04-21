@@ -29,60 +29,58 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.ui.StatusBar;
-import imagej.ui.UIService;
-import net.miginfocom.swt.MigLayout;
-
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.ProgressBar;
-import org.scijava.Context;
-import org.scijava.app.event.StatusEvent;
-import org.scijava.event.EventHandler;
-import org.scijava.plugin.Parameter;
+import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.ToggleWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of {@link StatusBar}.
+ * SWT implementation of boolean toggle widget.
  * 
  * @author Curtis Rueden
  */
-public class SWTStatusBar extends Composite implements StatusBar {
+@Plugin(type = InputWidget.class)
+public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
+	ToggleWidget<Composite>
+{
 
-	private final Label label;
-	private final ProgressBar progressBar;
+	private Button checkbox;
 
-	@Parameter
-	private UIService uiService;
-
-	public SWTStatusBar(final Composite parent, final Context context) {
-		super(parent, 0);
-		context.inject(this);
-
-		setLayout(new MigLayout());
-		label = new Label(this, 0);
-		progressBar = new ProgressBar(this, 0);
-	}
+	// -- InputWidget methods --
 
 	@Override
-	public void setStatus(final String message) {
-		label.setText(message);
+	public Boolean getValue() {
+		return checkbox.getSelection();
 	}
+
+	// -- WrapperPlugin methods --
 
 	@Override
-	public void setProgress(final int val, final int max) {
-		progressBar.setSelection(val);
-		progressBar.setMaximum(max);
+	public void set(final WidgetModel model) {
+		super.set(model);
+
+		checkbox = new Button(getComponent(), SWT.CHECK);
+
+		refreshWidget();
 	}
 
-	@EventHandler
-	protected void onEvent(final StatusEvent event) {
-		final String message = uiService.getStatusMessage(event);
-		final int val = event.getProgressValue();
-		final int max = event.getProgressMaximum();
-		setStatus(message);
-		setProgress(val, max);
+	// -- Typed methods --
+
+	@Override
+	public boolean supports(final WidgetModel model) {
+		return super.supports(model) && model.isBoolean();
 	}
 
+	// -- AbstractUIInputWidget methods ---
+
+	@Override
+	public void doRefresh() {
+		final Boolean value = (Boolean) get().getValue();
+		if (value != getValue()) checkbox.setSelection(value != null && value);
+	}
 }

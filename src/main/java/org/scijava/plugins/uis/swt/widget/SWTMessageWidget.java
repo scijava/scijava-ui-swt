@@ -29,25 +29,68 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.display;
+package org.scijava.plugins.uis.swt.widget;
 
-import imagej.data.Dataset;
-
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.scijava.Priority;
+import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.MessageWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * TODO
+ * SWT implementation of message widget.
  * 
  * @author Curtis Rueden
  */
-public class SWTImageFrame extends Shell {
+@Plugin(type = InputWidget.class, priority = Priority.HIGH_PRIORITY)
+public class SWTMessageWidget extends SWTInputWidget<String> implements
+	MessageWidget<Composite>
+{
 
-	public SWTImagePanel getPanel() {
+	// -- InputWidget methods --
+
+	@Override
+	public String getValue() {
 		return null;
 	}
 
-	public void setDataset(final Dataset dataset) {
-		// TODO
+	@Override
+	public boolean isLabeled() {
+		return false;
+	}
+
+	@Override
+	public boolean isMessage() {
+		return true;
+	}
+
+	// -- WrapperPlugin methods --
+
+	@Override
+	public void set(final WidgetModel model) {
+		super.set(model);
+
+		final String text = model.getText();
+
+		final Label label = new Label(getComponent(), 0);
+		label.setText(text);
+		label.setLayoutData("span");
+	}
+
+	// -- Typed methods --
+
+	@Override
+	public boolean supports(final WidgetModel model) {
+		return super.supports(model) && model.isMessage();
+	}
+
+	// -- AbstractUIInputWidget methods ---
+
+	@Override
+	public void doRefresh() {
+		// NB: No action needed.
 	}
 
 }

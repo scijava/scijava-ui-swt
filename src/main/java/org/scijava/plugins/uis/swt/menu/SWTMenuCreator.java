@@ -29,17 +29,16 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.menu;
-
-import imagej.menu.AbstractMenuCreator;
-import imagej.menu.ShadowMenu;
-import imagej.module.ModuleInfo;
+package org.scijava.plugins.uis.swt.menu;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.scijava.menu.AbstractMenuCreator;
+import org.scijava.menu.ShadowMenu;
+import org.scijava.module.ModuleInfo;
 
 /**
  * Populates an SWT {@link Menu} with menu items from a {@link ShadowMenu}.

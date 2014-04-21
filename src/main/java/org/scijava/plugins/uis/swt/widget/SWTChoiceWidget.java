@@ -29,34 +29,33 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt.widget;
-
-import imagej.widget.InputWidget;
-import imagej.widget.NumberWidget;
-import imagej.widget.WidgetModel;
+package org.scijava.plugins.uis.swt.widget;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Slider;
 import org.scijava.plugin.Plugin;
+import org.scijava.widget.ChoiceWidget;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of number chooser widget.
+ * SWT implementation of multiple choice selector widget.
  * 
  * @author Curtis Rueden
  */
 @Plugin(type = InputWidget.class)
-public class SWTNumberWidget extends SWTInputWidget<Number> implements
-	NumberWidget<Composite>
+public class SWTChoiceWidget extends SWTInputWidget<String> implements
+	ChoiceWidget<Composite>
 {
 
-	private Slider slider;
+	private Combo combo;
 
 	// -- InputWidget methods --
 
 	@Override
-	public Number getValue() {
-		return slider.getSelection();
+	public String getValue() {
+		return combo.getItem(combo.getSelectionIndex());
 	}
 
 	// -- WrapperPlugin methods --
@@ -65,13 +64,10 @@ public class SWTNumberWidget extends SWTInputWidget<Number> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		final Number min = model.getMin();
-		final Number max = model.getMax();
-		final Number stepSize = model.getStepSize();
+		final String[] items = model.getChoices();
 
-		slider = new Slider(getComponent(), SWT.HORIZONTAL);
-		slider.setValues(min.intValue(), min.intValue(), max.intValue(), stepSize
-			.intValue(), stepSize.intValue(), 10 * stepSize.intValue());
+		combo = new Combo(getComponent(), SWT.DROP_DOWN);
+		combo.setItems(items);
 
 		refreshWidget();
 	}
@@ -80,15 +76,21 @@ public class SWTNumberWidget extends SWTInputWidget<Number> implements
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isNumber();
+		return super.supports(model) && model.isText() && model.isMultipleChoice();
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		final int value = ((Number) get().getValue()).intValue();
-		if (slider.getSelection() == value) return; // no change
-		slider.setSelection(value);
+		final String value = get().getValue().toString();
+		if (value.equals(getValue())) return; // no change
+		for (int i = 0; i < combo.getItemCount(); i++) {
+			final String item = combo.getItem(i);
+			if (item.equals(value)) {
+				combo.select(i);
+				break;
+			}
+		}
 	}
 }

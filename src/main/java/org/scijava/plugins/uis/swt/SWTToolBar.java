@@ -29,12 +29,7 @@
  * #L%
  */
 
-package net.imagej.plugins.uis.swt;
-
-import imagej.tool.Tool;
-import imagej.tool.ToolService;
-import imagej.ui.ToolBar;
-import imagej.ui.UIService;
+package org.scijava.plugins.uis.swt;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,6 +51,10 @@ import org.scijava.InstantiableException;
 import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.PluginInfo;
+import org.scijava.tool.Tool;
+import org.scijava.tool.ToolService;
+import org.scijava.ui.ToolBar;
+import org.scijava.ui.UIService;
 
 /**
  * SWT implementation of {@link ToolBar}.
