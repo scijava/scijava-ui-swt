@@ -1,6 +1,6 @@
-ImageJ SWT user interface
+SciJava SWT UI components
 -------------------------
 
-A proof-of-concept user interface for ImageJ using Eclipse SWT.
+SciJava user interface components using Eclipse SWT.
 
 Not yet functional!
