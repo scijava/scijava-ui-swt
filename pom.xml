@@ -118,13 +118,6 @@ Institute of Molecular Cell Biology and Genetics.</organizationName>
 		<url>https://github.com/scijava/scijava-ui-swt</url>
 	</scm>
 
-	<repositories>
-		<repository>
-			<id>imagej.public</id>
-			<url>http://maven.imagej.net/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<!-- NB: Include OS-specific SWT dependency. -->
 	<profiles>
 		<profile>
