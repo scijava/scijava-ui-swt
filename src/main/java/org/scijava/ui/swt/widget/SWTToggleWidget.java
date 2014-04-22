@@ -28,33 +28,33 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Slider;
 import org.scijava.plugin.Plugin;
 import org.scijava.widget.InputWidget;
-import org.scijava.widget.NumberWidget;
+import org.scijava.widget.ToggleWidget;
 import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of number chooser widget.
+ * SWT implementation of boolean toggle widget.
  * 
  * @author Curtis Rueden
  */
 @Plugin(type = InputWidget.class)
-public class SWTNumberWidget extends SWTInputWidget<Number> implements
-	NumberWidget<Composite>
+public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
+	ToggleWidget<Composite>
 {
 
-	private Slider slider;
+	private Button checkbox;
 
 	// -- InputWidget methods --
 
 	@Override
-	public Number getValue() {
-		return slider.getSelection();
+	public Boolean getValue() {
+		return checkbox.getSelection();
 	}
 
 	// -- WrapperPlugin methods --
@@ -63,13 +63,7 @@ public class SWTNumberWidget extends SWTInputWidget<Number> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		final Number min = model.getMin();
-		final Number max = model.getMax();
-		final Number stepSize = model.getStepSize();
-
-		slider = new Slider(getComponent(), SWT.HORIZONTAL);
-		slider.setValues(min.intValue(), min.intValue(), max.intValue(), stepSize
-			.intValue(), stepSize.intValue(), 10 * stepSize.intValue());
+		checkbox = new Button(getComponent(), SWT.CHECK);
 
 		refreshWidget();
 	}
@@ -78,15 +72,14 @@ public class SWTNumberWidget extends SWTInputWidget<Number> implements
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isNumber();
+		return super.supports(model) && model.isBoolean();
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		final int value = ((Number) get().getValue()).intValue();
-		if (slider.getSelection() == value) return; // no change
-		slider.setSelection(value);
+		final Boolean value = (Boolean) get().getValue();
+		if (value != getValue()) checkbox.setSelection(value != null && value);
 	}
 }

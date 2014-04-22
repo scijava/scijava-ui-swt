@@ -28,32 +28,33 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.scijava.plugin.Plugin;
 import org.scijava.widget.InputWidget;
-import org.scijava.widget.TextWidget;
+import org.scijava.widget.ObjectWidget;
 import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of text field widget.
+ * SWT implementation of multiple choice selector widget.
  * 
  * @author Curtis Rueden
  */
 @Plugin(type = InputWidget.class)
-public class SWTTextWidget extends SWTInputWidget<String> implements
-	TextWidget<Composite>
+public class SWTObjectWidget extends SWTInputWidget<Object> implements
+	ObjectWidget<Composite>
 {
 
-	private Text text;
+	private Combo combo;
 
 	// -- InputWidget methods --
 
 	@Override
-	public String getValue() {
-		return text.getText();
+	public Object getValue() {
+		return get().getObjectPool().get(combo.getSelectionIndex());
 	}
 
 	// -- WrapperPlugin methods --
@@ -62,9 +63,10 @@ public class SWTTextWidget extends SWTInputWidget<String> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		text = new Text(getComponent(), 0);
-		final int columns = model.getItem().getColumnCount();
-		text.setTextLimit(columns);
+		combo = new Combo(getComponent(), SWT.DROP_DOWN);
+		for (final Object item : model.getObjectPool()) {
+			combo.add(item.toString());
+		}
 
 		refreshWidget();
 	}
@@ -73,14 +75,15 @@ public class SWTTextWidget extends SWTInputWidget<String> implements
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isText() &&
-			!model.isMultipleChoice() && !model.isMessage();
+		return super.supports(model) && model.getObjectPool().size() > 0;
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		text.setText(get().getValue().toString());
+		final Object value = get().getValue();
+		final int index = get().getObjectPool().indexOf(value);
+		if (index >= 0) combo.select(index);
 	}
 }

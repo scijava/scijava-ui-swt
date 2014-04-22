@@ -28,68 +28,38 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.scijava.Priority;
-import org.scijava.plugin.Plugin;
-import org.scijava.widget.InputWidget;
-import org.scijava.widget.MessageWidget;
-import org.scijava.widget.WidgetModel;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.scijava.ui.ApplicationFrame;
 
 /**
- * SWT implementation of message widget.
+ * SWT implementation of {@link ApplicationFrame}.
  * 
  * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class, priority = Priority.HIGH_PRIORITY)
-public class SWTMessageWidget extends SWTInputWidget<String> implements
-	MessageWidget<Composite>
-{
+public class SWTApplicationFrame extends Shell implements ApplicationFrame {
 
-	// -- InputWidget methods --
+	public SWTApplicationFrame(final Display display) {
+		super(display, 0);
+	}
+
+	// -- ApplicationFrame methods --
 
 	@Override
-	public String getValue() {
-		return null;
+	public int getLocationX() {
+		return getLocation().x;
 	}
 
 	@Override
-	public boolean isLabeled() {
-		return false;
+	public int getLocationY() {
+		return getLocation().y;
 	}
 
 	@Override
-	public boolean isMessage() {
-		return true;
-	}
-
-	// -- WrapperPlugin methods --
-
-	@Override
-	public void set(final WidgetModel model) {
-		super.set(model);
-
-		final String text = model.getText();
-
-		final Label label = new Label(getComponent(), 0);
-		label.setText(text);
-		label.setLayoutData("span");
-	}
-
-	// -- Typed methods --
-
-	@Override
-	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isMessage();
-	}
-
-	// -- AbstractUIInputWidget methods ---
-
-	@Override
-	public void doRefresh() {
-		// NB: No action needed.
+	public void activate() {
+		forceFocus();
 	}
 
 }

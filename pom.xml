@@ -56,7 +56,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<packageName>net.imagej.plugins.uis.swt</packageName>
+							<packageName>org.scijava.ui.swt</packageName>
 						</manifest>
 					</archive>
 				</configuration>

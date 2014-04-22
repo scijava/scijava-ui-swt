@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -42,10 +42,10 @@ import org.scijava.module.Module;
 import org.scijava.module.process.PreprocessorPlugin;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugins.uis.swt.SWTUI;
 import org.scijava.ui.AbstractInputHarvesterPlugin;
 import org.scijava.ui.UIService;
 import org.scijava.ui.UserInterface;
+import org.scijava.ui.swt.SWTUI;
 import org.scijava.widget.InputHarvester;
 import org.scijava.widget.InputPanel;
 

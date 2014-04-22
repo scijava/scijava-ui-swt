@@ -28,12 +28,12 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
 import org.eclipse.swt.widgets.Composite;
-import org.scijava.plugins.uis.swt.SWTUI;
 import org.scijava.ui.AbstractUIInputWidget;
 import org.scijava.ui.UserInterface;
+import org.scijava.ui.swt.SWTUI;
 import org.scijava.widget.WidgetModel;
 
 /**

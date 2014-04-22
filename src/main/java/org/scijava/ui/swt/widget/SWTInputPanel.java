@@ -28,72 +28,67 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
+
+import net.miginfocom.swt.MigLayout;
 
 import org.eclipse.swt.widgets.Composite;
-import org.scijava.plugin.Plugin;
-import org.scijava.widget.Button;
-import org.scijava.widget.ButtonWidget;
+import org.eclipse.swt.widgets.Label;
+import org.scijava.widget.AbstractInputPanel;
+import org.scijava.widget.InputPanel;
 import org.scijava.widget.InputWidget;
-import org.scijava.widget.WidgetModel;
 
 /**
- * A SWT widget that displays a button and invokes the callback of a parameter
- * when the button is clicked.
+ * SWT implementation of {@link InputPanel}.
  * 
- * @author Barry DeZonia
+ * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class)
-public class SWTButtonWidget extends SWTInputWidget<Button> implements
-	ButtonWidget<Composite>
-{
+public class SWTInputPanel extends AbstractInputPanel<Composite, Composite> {
 
-	// private Button button;
+	private final Composite parent;
 
-	// -- InputWidget methods --
+	private Composite uiComponent;
+
+	public SWTInputPanel(final Composite parent) {
+		this.parent = parent;
+	}
+
+	// -- InputPanel methods --
 
 	@Override
-	public Button getValue() {
-		return null;
+	public void addWidget(final InputWidget<?, Composite> widget) {
+		super.addWidget(widget);
+		// CTR FIXME: Find a way to put the label first.
+		addLabel(widget.get().getWidgetLabel());
 	}
 
 	@Override
-	public boolean isLabeled() {
-		return false;
+	public Class<Composite> getWidgetComponentType() {
+		return Composite.class;
 	}
 
-	// -- WrapperPlugin methods --
+	// -- UIComponent methods --
 
 	@Override
-	public void set(final WidgetModel model) {
-		super.set(model);
-
-		throw new UnsupportedOperationException("unimplemented feature");
-
-		/* TODO - adapt the following code:
-		button = new Button(model.getWidgetLabel());
-		button.addActionListener(new ActionListener() {
-				
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				model.getItem().callback(model.getModule());
-			}
-		});
-		getComponent().add(button);
-		*/
+	public Composite getComponent() {
+		if (uiComponent == null) {
+			uiComponent = new Composite(parent, 0);
+			uiComponent.setLayout(new MigLayout("wrap 2"));
+		}
+		return uiComponent;
 	}
-
-	// -- Typed methods --
 
 	@Override
-	public boolean supports(final WidgetModel model) {
-		return model.isType(Button.class);
+	public Class<Composite> getComponentType() {
+		return Composite.class;
 	}
 
-	// -- AbstractUIInputWidget methods ---
+	// -- Helper methods --
 
-	@Override
-	public void doRefresh() {
-		// nothing to do
+	private Label addLabel(final String text) {
+		final Label label = new Label(getComponent(), 0);
+		label.setText(text);
+		return label;
 	}
+
 }

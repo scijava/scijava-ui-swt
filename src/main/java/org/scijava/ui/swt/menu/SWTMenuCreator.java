@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.menu;
+package org.scijava.ui.swt.menu;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;

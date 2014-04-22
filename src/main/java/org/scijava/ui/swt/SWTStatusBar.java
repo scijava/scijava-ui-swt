@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt;
+package org.scijava.ui.swt;
 
 import net.miginfocom.swt.MigLayout;
 

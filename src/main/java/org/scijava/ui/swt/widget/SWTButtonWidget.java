@@ -28,39 +28,38 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
-import java.io.File;
-
-import net.miginfocom.swt.MigLayout;
-
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.scijava.plugin.Plugin;
-import org.scijava.widget.FileWidget;
+import org.scijava.widget.Button;
+import org.scijava.widget.ButtonWidget;
 import org.scijava.widget.InputWidget;
 import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of file selector widget.
+ * A SWT widget that displays a button and invokes the callback of a parameter
+ * when the button is clicked.
  * 
- * @author Curtis Rueden
+ * @author Barry DeZonia
  */
 @Plugin(type = InputWidget.class)
-public class SWTFileWidget extends SWTInputWidget<File> implements
-	FileWidget<Composite>
+public class SWTButtonWidget extends SWTInputWidget<Button> implements
+	ButtonWidget<Composite>
 {
 
-	private Text path;
-	private Button browse;
+	// private Button button;
 
 	// -- InputWidget methods --
 
 	@Override
-	public File getValue() {
-		final String text = path.getText();
-		return text.isEmpty() ? null : new File(text);
+	public Button getValue() {
+		return null;
+	}
+
+	@Override
+	public boolean isLabeled() {
+		return false;
 	}
 
 	// -- WrapperPlugin methods --
@@ -69,30 +68,32 @@ public class SWTFileWidget extends SWTInputWidget<File> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		getComponent().setLayout(new MigLayout());
+		throw new UnsupportedOperationException("unimplemented feature");
 
-		path = new Text(getComponent(), 0);
-		path.setTextLimit(20);
-
-		browse = new Button(getComponent(), 0);
-		browse.setText("Browse");
-
-		refreshWidget();
+		/* TODO - adapt the following code:
+		button = new Button(model.getWidgetLabel());
+		button.addActionListener(new ActionListener() {
+				
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.getItem().callback(model.getModule());
+			}
+		});
+		getComponent().add(button);
+		*/
 	}
 
 	// -- Typed methods --
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isType(File.class);
+		return model.isType(Button.class);
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		final String text = get().getText();
-		if (text.equals(path.getText())) return; // no change
-		path.setText(text);
+		// nothing to do
 	}
 }

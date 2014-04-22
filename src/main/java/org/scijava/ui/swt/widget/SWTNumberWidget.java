@@ -28,67 +28,65 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
-import net.miginfocom.swt.MigLayout;
-
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.scijava.widget.AbstractInputPanel;
-import org.scijava.widget.InputPanel;
+import org.eclipse.swt.widgets.Slider;
+import org.scijava.plugin.Plugin;
 import org.scijava.widget.InputWidget;
+import org.scijava.widget.NumberWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of {@link InputPanel}.
+ * SWT implementation of number chooser widget.
  * 
  * @author Curtis Rueden
  */
-public class SWTInputPanel extends AbstractInputPanel<Composite, Composite> {
+@Plugin(type = InputWidget.class)
+public class SWTNumberWidget extends SWTInputWidget<Number> implements
+	NumberWidget<Composite>
+{
 
-	private final Composite parent;
+	private Slider slider;
 
-	private Composite uiComponent;
-
-	public SWTInputPanel(final Composite parent) {
-		this.parent = parent;
-	}
-
-	// -- InputPanel methods --
+	// -- InputWidget methods --
 
 	@Override
-	public void addWidget(final InputWidget<?, Composite> widget) {
-		super.addWidget(widget);
-		// CTR FIXME: Find a way to put the label first.
-		addLabel(widget.get().getWidgetLabel());
+	public Number getValue() {
+		return slider.getSelection();
 	}
+
+	// -- WrapperPlugin methods --
 
 	@Override
-	public Class<Composite> getWidgetComponentType() {
-		return Composite.class;
+	public void set(final WidgetModel model) {
+		super.set(model);
+
+		final Number min = model.getMin();
+		final Number max = model.getMax();
+		final Number stepSize = model.getStepSize();
+
+		slider = new Slider(getComponent(), SWT.HORIZONTAL);
+		slider.setValues(min.intValue(), min.intValue(), max.intValue(), stepSize
+			.intValue(), stepSize.intValue(), 10 * stepSize.intValue());
+
+		refreshWidget();
 	}
 
-	// -- UIComponent methods --
+	// -- Typed methods --
 
 	@Override
-	public Composite getComponent() {
-		if (uiComponent == null) {
-			uiComponent = new Composite(parent, 0);
-			uiComponent.setLayout(new MigLayout("wrap 2"));
-		}
-		return uiComponent;
+	public boolean supports(final WidgetModel model) {
+		return super.supports(model) && model.isNumber();
 	}
+
+	// -- AbstractUIInputWidget methods ---
 
 	@Override
-	public Class<Composite> getComponentType() {
-		return Composite.class;
+	public void doRefresh() {
+		final int value = ((Number) get().getValue()).intValue();
+		if (slider.getSelection() == value) return; // no change
+		slider.setSelection(value);
 	}
-
-	// -- Helper methods --
-
-	private Label addLabel(final String text) {
-		final Label label = new Label(getComponent(), 0);
-		label.setText(text);
-		return label;
-	}
-
 }

@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt;
+package org.scijava.ui.swt;
 
 import java.io.File;
 
@@ -42,13 +42,13 @@ import org.scijava.menu.MenuService;
 import org.scijava.platform.event.AppMenusCreatedEvent;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
-import org.scijava.plugins.uis.swt.menu.SWTMenuCreator;
 import org.scijava.ui.AbstractUserInterface;
 import org.scijava.ui.DialogPrompt;
 import org.scijava.ui.DialogPrompt.MessageType;
 import org.scijava.ui.DialogPrompt.OptionType;
 import org.scijava.ui.SystemClipboard;
 import org.scijava.ui.UserInterface;
+import org.scijava.ui.swt.menu.SWTMenuCreator;
 import org.scijava.ui.viewer.DisplayWindow;
 
 /**

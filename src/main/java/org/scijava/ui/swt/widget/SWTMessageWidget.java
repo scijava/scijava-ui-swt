@@ -28,33 +28,41 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt.widget;
+package org.scijava.ui.swt.widget;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.scijava.Priority;
 import org.scijava.plugin.Plugin;
 import org.scijava.widget.InputWidget;
-import org.scijava.widget.ToggleWidget;
+import org.scijava.widget.MessageWidget;
 import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of boolean toggle widget.
+ * SWT implementation of message widget.
  * 
  * @author Curtis Rueden
  */
-@Plugin(type = InputWidget.class)
-public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
-	ToggleWidget<Composite>
+@Plugin(type = InputWidget.class, priority = Priority.HIGH_PRIORITY)
+public class SWTMessageWidget extends SWTInputWidget<String> implements
+	MessageWidget<Composite>
 {
-
-	private Button checkbox;
 
 	// -- InputWidget methods --
 
 	@Override
-	public Boolean getValue() {
-		return checkbox.getSelection();
+	public String getValue() {
+		return null;
+	}
+
+	@Override
+	public boolean isLabeled() {
+		return false;
+	}
+
+	@Override
+	public boolean isMessage() {
+		return true;
 	}
 
 	// -- WrapperPlugin methods --
@@ -63,23 +71,25 @@ public class SWTToggleWidget extends SWTInputWidget<Boolean> implements
 	public void set(final WidgetModel model) {
 		super.set(model);
 
-		checkbox = new Button(getComponent(), SWT.CHECK);
+		final String text = model.getText();
 
-		refreshWidget();
+		final Label label = new Label(getComponent(), 0);
+		label.setText(text);
+		label.setLayoutData("span");
 	}
 
 	// -- Typed methods --
 
 	@Override
 	public boolean supports(final WidgetModel model) {
-		return super.supports(model) && model.isBoolean();
+		return super.supports(model) && model.isMessage();
 	}
 
 	// -- AbstractUIInputWidget methods ---
 
 	@Override
 	public void doRefresh() {
-		final Boolean value = (Boolean) get().getValue();
-		if (value != getValue()) checkbox.setSelection(value != null && value);
+		// NB: No action needed.
 	}
+
 }

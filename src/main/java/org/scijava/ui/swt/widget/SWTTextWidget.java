@@ -28,38 +28,59 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt;
+package org.scijava.ui.swt.widget;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.scijava.ui.ApplicationFrame;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.scijava.plugin.Plugin;
+import org.scijava.widget.InputWidget;
+import org.scijava.widget.TextWidget;
+import org.scijava.widget.WidgetModel;
 
 /**
- * SWT implementation of {@link ApplicationFrame}.
+ * SWT implementation of text field widget.
  * 
  * @author Curtis Rueden
  */
-public class SWTApplicationFrame extends Shell implements ApplicationFrame {
+@Plugin(type = InputWidget.class)
+public class SWTTextWidget extends SWTInputWidget<String> implements
+	TextWidget<Composite>
+{
 
-	public SWTApplicationFrame(final Display display) {
-		super(display, 0);
-	}
+	private Text text;
 
-	// -- ApplicationFrame methods --
-
-	@Override
-	public int getLocationX() {
-		return getLocation().x;
-	}
+	// -- InputWidget methods --
 
 	@Override
-	public int getLocationY() {
-		return getLocation().y;
+	public String getValue() {
+		return text.getText();
 	}
+
+	// -- WrapperPlugin methods --
 
 	@Override
-	public void activate() {
-		forceFocus();
+	public void set(final WidgetModel model) {
+		super.set(model);
+
+		text = new Text(getComponent(), 0);
+		final int columns = model.getItem().getColumnCount();
+		text.setTextLimit(columns);
+
+		refreshWidget();
 	}
 
+	// -- Typed methods --
+
+	@Override
+	public boolean supports(final WidgetModel model) {
+		return super.supports(model) && model.isText() &&
+			!model.isMultipleChoice() && !model.isMessage();
+	}
+
+	// -- AbstractUIInputWidget methods ---
+
+	@Override
+	public void doRefresh() {
+		text.setText(get().getValue().toString());
+	}
 }

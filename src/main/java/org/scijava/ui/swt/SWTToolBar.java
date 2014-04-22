@@ -28,7 +28,7 @@
  * #L%
  */
 
-package org.scijava.plugins.uis.swt;
+package org.scijava.ui.swt;
 
 import java.io.IOException;
 import java.io.InputStream;
