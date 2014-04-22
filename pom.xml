@@ -15,8 +15,8 @@
 	<artifactId>scijava-ui-swt</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 
-	<name>ImageJ UI: SWT</name>
-	<description>An Eclipse SWT-based ImageJ user interface. Not yet functional.</description>
+	<name>SciJava UI: SWT</name>
+	<description>SciJava user interface components for Eclipse SWT. Not yet functional.</description>
 
 	<licenses>
 		<license>
