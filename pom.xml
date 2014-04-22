@@ -93,7 +93,7 @@ Institute of Molecular Cell Biology and Genetics.</organizationName>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>http://github.com/imagej/imagej-ui-swt/issues</url>
+		<url>http://github.com/scijava/scijava-ui-swt/issues</url>
 	</issueManagement>
 
 	<ciManagement>
@@ -112,10 +112,10 @@ Institute of Molecular Cell Biology and Genetics.</organizationName>
 	</mailingLists>
 
 	<scm>
-		<connection>scm:git:git://github.com/imagej/imagej-ui-swt</connection>
-		<developerConnection>scm:git:git@github.com:imagej/imagej-ui-swt</developerConnection>
+		<connection>scm:git:git://github.com/scijava/scijava-ui-swt</connection>
+		<developerConnection>scm:git:git@github.com:scijava/scijava-ui-swt</developerConnection>
 		<tag>HEAD</tag>
-		<url>https://github.com/imagej/imagej-ui-swt</url>
+		<url>https://github.com/scijava/scijava-ui-swt</url>
 	</scm>
 
 	<repositories>
