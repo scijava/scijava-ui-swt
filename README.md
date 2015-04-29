@@ -1,4 +1,4 @@
-![](http://jenkins.imagej.net/job/SciJava-UI-SWT/lastBuild/badge/icon)
+[![](http://jenkins.imagej.net/job/SciJava-UI-SWT/lastBuild/badge/icon)](http://jenkins.imagej.net/job/SciJava-UI-SWT/)
 
 SciJava SWT UI components
 -------------------------
