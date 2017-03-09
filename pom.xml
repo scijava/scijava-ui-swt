@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>9.0.0</version>
+		<version>14.0.0</version>
 		<relativePath />
 	</parent>
 
@@ -17,7 +17,12 @@
 
 	<name>SciJava UI: SWT</name>
 	<description>SciJava user interface components for Eclipse SWT. Not yet functional.</description>
+	<url>https://github.com/scijava/scijava-ui-swt</url>
 	<inceptionYear>2011</inceptionYear>
+	<organization>
+		<name>SciJava</name>
+		<url>https://scijava.org/</url>
+	</organization>
 	<licenses>
 		<license>
 			<name>Simplified BSD License</name>
@@ -48,6 +53,16 @@
 		</contributor>
 	</contributors>
 
+	<mailingLists>
+		<mailingList>
+			<name>SciJava</name>
+			<subscribe>https://groups.google.com/group/scijava</subscribe>
+			<unsubscribe>https://groups.google.com/group/scijava</unsubscribe>
+			<post>scijava@googlegroups.com</post>
+			<archive>https://groups.google.com/group/scijava</archive>
+		</mailingList>
+	</mailingLists>
+
 	<scm>
 		<connection>scm:git:git://github.com/scijava/scijava-ui-swt</connection>
 		<developerConnection>scm:git:git@github.com:scijava/scijava-ui-swt</developerConnection>
@@ -64,9 +79,12 @@
 	</ciManagement>
 
 	<properties>
-		<scijava-common.version>2.16.0</scijava-common.version>
+		<package-name>org.scijava.ui.swt</package-name>
+		<license.licenseName>bsd_2</license.licenseName>
+		<license.copyrightOwners>Board of Regents of the University of
+Wisconsin-Madison.</license.copyrightOwners>
+		<license.projectName>SciJava UI components for Eclipse SWT.</license.projectName>
 
-		<miglayout.version>3.7.3.1</miglayout.version>
 		<swt.version>3.0m7</swt.version>
 	</properties>
 
@@ -85,31 +103,6 @@
 			<classifier>swt</classifier>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<packageName>org.scijava.ui.swt</packageName>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<licenseName>bsd_2</licenseName>
-					<organizationName>Board of Regents of the University of
-Wisconsin-Madison.</organizationName>
-					<projectName>SciJava UI components for Eclipse SWT.</projectName>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<!-- NB: Include OS-specific SWT dependency. -->
 	<profiles>
