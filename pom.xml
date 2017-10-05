@@ -86,6 +86,9 @@ Wisconsin-Madison.</license.copyrightOwners>
 		<license.projectName>SciJava UI components for Eclipse SWT.</license.projectName>
 
 		<swt.version>3.0m7</swt.version>
+
+		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
+		<releaseProfiles>deploy-to-imagej</releaseProfiles>
 	</properties>
 
 	<dependencies>
