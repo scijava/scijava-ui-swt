@@ -1,4 +1,4 @@
-[![](https://travis-ci.org/scijava/scijava-ui-swt.svg?branch=master)](https://travis-ci.org/scijava/scijava-ui-swt)
+[![](https://github.com/scijava/scijava-ui-swt/actions/workflows/build-main.yml/badge.svg)](https://github.com/scijava/scijava-ui-swt/actions/workflows/build-main.yml)
 
 SciJava SWT UI components
 -------------------------
